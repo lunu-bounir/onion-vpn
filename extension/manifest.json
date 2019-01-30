@@ -1,0 +1,40 @@
+{
+  "manifest_version" :2,
+  "version": "0.1.0",
+  "name": "Onion VPN with load balancing",
+  "description": "Simultaneously connect to multiple Tor proxy servers to increase anonymity and speed",
+  "permissions": [
+    "proxy",
+    "nativeMessaging",
+    "contextMenus",
+    "storage",
+    "notifications"
+  ],
+  "background": {
+    "scripts": [
+      "tor.js",
+      "background.js",
+      "context.js"
+    ]
+  },
+  "icons": {
+    "16": "data/icons/disconnected/16.png",
+    "19": "data/icons/disconnected/19.png",
+    "32": "data/icons/disconnected/32.png",
+    "38": "data/icons/disconnected/38.png",
+    "48": "data/icons/disconnected/48.png",
+    "64": "data/icons/disconnected/64.png",
+    "128": "data/icons/disconnected/128.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "data/icons/disconnected/16.png",
+      "19": "data/icons/disconnected/19.png",
+      "32": "data/icons/disconnected/32.png",
+      "38": "data/icons/disconnected/38.png",
+      "48": "data/icons/disconnected/48.png",
+      "64": "data/icons/disconnected/64.png",
+      "128": "data/icons/disconnected/128.png"
+    }
+  }
+}

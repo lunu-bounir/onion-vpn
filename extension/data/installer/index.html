@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Helper :: Clipboard History Manager</title>
+  <meta charset="utf-8">
+  <style>
+    body {
+      font-family: "Helvetica Neue",Helvetica,sans-serif;
+      font-size: 13px;
+      background: url('bg.png') bottom right no-repeat;
+      height: calc(100vh - 30px);
+      margin: 10px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      flex-direction: column;
+    }
+    h1 {
+      font-weight: 400;
+    }
+    #installed {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgb(230, 255, 231);
+      padding: 10px;
+      margin: 10px 0 ;
+    }
+    body[data-os=mac] [windows] {
+      display: none;
+    }
+    body[data-os=windows] [mac] {
+      display: none;
+    }
+    code {
+      background-color: rgba(0, 0, 0, 0.1);
+      padding: 0 4px;
+    }
+    hr {
+      opacity: 0.2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Helper Component</h1>
+  <p>For this extension to use the official Tor executable, a native component is needed. To install this component:</p>
+  <ul style="flex: 1">
+    <li>Download the <a id="package" href="#" >installer</a> script</li>
+    <li>Extract it in a local directory</li>
+    <li mac>Drop <code>install.sh</code> into a terminal window and press the Enter key</li>
+    <li windows>Double-click the <code>install.bat</code> file to install the component</li>
+    <li>Press the "Reload Extension" button to recheck integration</li>
+  </ul>
+  <hr>
+  <p>
+    -> The native component can be completely removed any time, using the <code id="uninstall">uninstall.sh</code> script
+    <br>
+    -> The native component is an <a href="https://github.com/lunu-bounir/onion-helper/" target="_blank">open-source</a> project, if you found a bug please open a new issue.
+    <br>
+    -> To see the compiling log visit <a href="https://travis-ci.org/lunu-bounir/onion-helper" target="_blank">travis-ci.org</a>
+  </p>
+  <div id="installed">
+    <p>Native component is already installed! If you get this window, it means the native component is crashed. You can restart the extension to retry.</p>
+  </div>
+  <div>
+    <input id="restart" type="button" value="Reload Extension">
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>

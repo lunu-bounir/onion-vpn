@@ -5,7 +5,6 @@ var {spawn, exec} = require('child_process');
 var childs = {};
 
 process.on('exit', () => Object.keys(childs).forEach(name => childs[name].kill()));
-
 // closing node when parent process is killed
 process.stdin.on('end', () => process.exit());
 
@@ -41,7 +40,17 @@ nativeMessage.onMessage.addListener(request => {
     });
   }
   else if (request.method === 'exec') {
-    exec(request.command);
+    exec(request.command, (error, stdout, stderr) => nativeMessage.postMessage({
+      error, stdout, stderr
+    }));
+  }
+  else if (request.method === 'echo') {
+    nativeMessage.postMessage(request);
+  }
+  else if (request.method === 'version') {
+    nativeMessage.postMessage({
+      version: '0.1.0'
+    });
   }
 });
 

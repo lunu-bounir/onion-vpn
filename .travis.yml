@@ -1,0 +1,20 @@
+notifications:
+  email: false
+sudo: required
+before_install:
+- sudo apt-get install -y p7zip-full dmg2img
+script:
+  - ./helper/package.sh
+deploy:
+  provider: releases
+  prerelease: true
+  api_key:
+    secure: j5chnWHNYsNRovqYU0NQpkjkwbeJebZFZio2zMwr/OGhlAWuIgNLTDF+go77YhQZpJ5ECIhBC89wRZhdzl23EU3ibN7AL0n9YSfNtnQ8sWdVNmddHsookeFmERuz4psSPf/lksXHQgHzaaMYCKqid1/b6PKIAtRtK3fODVALJzus1lCRjq5m79JM5GInAgHsZUhNuIT/jtcOvWcKdPMBQ+PXyjcvmUvGVpzkSwnzNVN9HmQkgLs8LYQYplIvcQSOuI/oP1BJBm+bQjNeDKishUSpwpBHZOJuTDcH6sdvYOfGsFdYk9RMcWyStOi0GLP5mfLNJn5WRYcI5s2t6Kt0dWDZzaHSxB/3NE7VcfLrstc0QBun0E+qYSBgy6pdoXsOnMg+hRm1+98ost/V0EixnymCR59ef2kJTRcN+2qiBJHq8vz3KjB9XwhBP3SRZ7rs0ZCr59QvRX4z5nQEnqgyyUOb4QvGS5ffdypTQCXqm2lW1kE3aAMo9CpMtD2BwY0lbD4Eo42wQIEuvwP/e6gf5A9KaPozOEQzzKb2E5dgeXVv5IhMa+VzqbsxAa9Bqf2PSZRU60tJ/Q/DXPCSDn0bQ98yhqIBEMLOBoqTnyNbSP5eDMf1cdE1LASVpZU13xu7DbMl85ZKOFfKSR7gCAqMccvbf5pWWXTGwiISXSGH9gQ=
+  file:
+    - ./helper/mac.zip
+    - ./helper/win_32.zip
+    - ./helper/win_64.zip
+  skip_cleanup: true
+  on:
+    tags: true
+  overwrite: true

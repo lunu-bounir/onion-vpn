@@ -2,26 +2,26 @@
 
 cd "$(dirname "$0")"
 
-FILE=helper
-ID=native.helper
-DESCRIPTION="native part of the Clipboard History Manager extension"
+ID=onion.vpn.helper
+DESCRIPTION="native part of the Onion VPN extension"
 
 echo ".. Copy files to $HOME/.config/$ID/"
 mkdir -p $HOME/.config/$ID/
-cp run.sh $HOME/.config/$ID/
-cp node $HOME/.config/$ID/
-cp app.js $HOME/.config/$ID/
-cp messaging.js $HOME/.config/$ID/
+cp assets/node.sh $HOME/.config/$ID/
+cp assets/node $HOME/.config/$ID/
+cp assets/tor $HOME/.config/$ID/
+cp assets/app.js $HOME/.config/$ID/
+cp assets/messaging.js $HOME/.config/$ID/
 
 cat > $ID.json <<- EOM
 {
   "name": "$ID",
   "description": "$DESCRIPTION",
-  "path": "$HOME/.config/$ID/run.sh",
+  "path": "$HOME/.config/$ID/node.sh",
   "type": "stdio",
   "allowed_origins": [
-    "chrome-extension://ddeefmboniaokefbppleacoegfagifab/",
-    "chrome-extension://empcclfpdmhckpdfpgljnbbkcakfnbho/"
+    "chrome-extension://diekiockdlleigoinkcjjkpnpapbkfbo/",
+    "chrome-extension://laodgoeoeloaponlioalomjadbmkkkhd/"
   ]
 }
 EOM
@@ -40,9 +40,9 @@ cat > "$HOME/Library/Application Support/Mozilla/NativeMessagingHosts/$ID.json" 
 {
   "name": "$ID",
   "description": "$DESCRIPTION",
-  "path": "$HOME/.config/$ID/run.sh",
+  "path": "$HOME/.config/$ID/node.sh",
   "type": "stdio",
-  "allowed_extensions": ["0472a3daed8fd439836efd3c54d94e90f6c46018@temporary-addon"]
+  "allowed_extensions": ["{4d0fd54a-4590-45af-a943-60330144f676}"]
 }
 EOM
 
