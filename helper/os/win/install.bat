@@ -2,37 +2,43 @@
 
 pushd "%~dp0"
 
-SET FILE=helper.exe
-SET ID=desktop.clipboard.manager
+SET ID=onion.vpn.helper
+SET =native part of the Onion VPN extension
 
 SET PATH=C:\Windows\System32;%PATH%
 
 ECHO .. Kill already running instances
-taskkill /im %FILE% /f >nul 2>&1
+taskkill /im tor.exe /f >nul 2>&1
+taskkill /im node.exe /f >nul 2>&1
 
 ECHO.
 ECHO .. Copy %FILE% to %LocalAPPData%\%ID%\
 mkdir %LocalAPPData%\%ID%
-copy /Y %FILE% %LocalAPPData%\%ID%\
+mkdir %LocalAPPData%\%ID%\node
+copy assets\node\* %LocalAPPData%\%ID%\node\
+mkdir %LocalAPPData%\%ID%\tor
+copy assets\tor\* %LocalAPPData%\%ID%\tor\
+copy assets\app.js %LocalAPPData%\%ID%\
+copy assets\messaging.js %LocalAPPData%\%ID%\
 
 ECHO .. Copy Firefox manifest to %LocalAPPData%\%ID%\manifest-firefox.json
 (
   ECHO {
-  ECHO   "name": "desktop.clipboard.manager",
-  ECHO   "description": "native part of the Clipboard History Manager extension",
-  ECHO   "path": "%FILE%",
+  ECHO   "name": "%ID%",
+  ECHO   "description": "%DESCRIPTION%",
+  ECHO   "path": "node\\node.bat",
   ECHO   "type": "stdio",
-  ECHO   "allowed_extensions": ["{82b3a366-18e0-4400-aa21-36a966d0a42e}"]
+  ECHO   "allowed_extensions": ["{4d0fd54a-4590-45af-a943-60330144f676}"]
   ECHO }
 ) > %LocalAPPData%\%ID%\manifest-firefox.json
 ECHO .. Copy Chrome manifest to %LocalAPPData%\%ID%\manifest-chrome.json
 (
   ECHO {
-  ECHO   "name": "desktop.clipboard.manager",
-  ECHO   "description": "native part of the Clipboard History Manager extension",
-  ECHO   "path": "%FILE%",
+  ECHO   "name": "%ID%",
+  ECHO   "description": "%DESCRIPTION%",
+  ECHO   "path": "node\\node.bat",
   ECHO   "type": "stdio",
-  ECHO   "allowed_origins": ["chrome-extension://pkigjgihlaonoomgjgannieikjecdhil/", "chrome-extension://empcclfpdmhckpdfpgljnbbkcakfnbho/"]
+  ECHO   "allowed_origins": ["chrome-extension://diekiockdlleigoinkcjjkpnpapbkfbo/", "chrome-extension://laodgoeoeloaponlioalomjadbmkkkhd/"]
   ECHO }
 ) > %LocalAPPData%\%ID%\manifest-chrome.json
 

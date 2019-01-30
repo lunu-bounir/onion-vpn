@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-FILE=helper
-ID=desktop.clipboard.manager
+ID=onion.vpn.helper
 
 echo " .. Removing manifest file for Google Chrome"
 rm -f $HOME/Library/Application\ Support/Google/Chrome/NativeMessagingHosts/$ID.json
