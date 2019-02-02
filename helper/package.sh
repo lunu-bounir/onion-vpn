@@ -18,23 +18,21 @@ popd
 pwd
 ls
 
-pushd os/linux
-mkdir 32
-pushd 32
+# pushd os/linux
+# mkdir 32
+# pushd 32
 # wget https://www.torproject.org/dist/torbrowser/8.0.5/tor-browser-linux32-8.0.5_en-US.tar.xz
 # tar -xf tor-browser-linux32-8.0.5_en-US.tar.xz "tor-browser_en-US/Browser/TorBrowser/Tor/tor"
 # mv tor-browser_en-US/Browser/TorBrowser/Tor/tor ./tor
-popd
-pwd
+# popd
 
-mkdir 64
-pushd 64
+# mkdir 64
+# pushd 64
 # wget https://www.torproject.org/dist/torbrowser/8.0.5/tor-browser-linux64-8.0.5_en-US.tar.xz
 # tar -xf tor-browser-linux64-8.0.5_en-US.tar.xz "tor-browser_en-US/Browser/TorBrowser/Tor/tor"
 # mv tor-browser_en-US/Browser/TorBrowser/Tor/tor ./tor
-popd
-popd
-pwd
+# popd
+# popd
 
 #get the official NodeJS executable
 pushd os/mac
@@ -58,12 +56,11 @@ popd
 popd
 pwd
 
-pushd os/linux/64
+# pushd os/linux/64
 # wget https://nodejs.org/dist/v10.15.1/node-v10.15.1-linux-x64.tar.xz
 # tar -xf node-v10.15.1-linux-x64.tar.xz "node-v10.15.1-linux-x64/bin/node"
 # mv node-v10.15.1-linux-x64/bin/node ./node
-popd
-pwd
+# popd
 
 # mac packaging
 mkdir temp1
