@@ -16,6 +16,7 @@ wget https://www.torproject.org/dist/torbrowser/8.0.5/tor-win32-0.3.5.7.zip
 7z e tor-win32-0.3.5.7.zip tor.exe *.dll -r
 popd
 pwd
+ls
 
 pushd os/linux
 mkdir 32
