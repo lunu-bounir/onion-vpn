@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # get the official tor executable from www.torproject.org
-cd os/mac
+cd helper/os/mac
 wget -O TorBrowser.dmg https://www.torproject.org/dist/torbrowser/8.0.5/TorBrowser-8.0.5-osx64_en-US.dmg
 dmg2img TorBrowser.dmg TorBrowser.img
 7z e TorBrowser.img tor.real -r
