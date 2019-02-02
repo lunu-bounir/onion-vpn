@@ -3,68 +3,66 @@
 cd helper
 
 # get the official tor executable from www.torproject.org
-pushd os/mac
+cd os/mac
 wget -O TorBrowser.dmg https://www.torproject.org/dist/torbrowser/8.0.5/TorBrowser-8.0.5-osx64_en-US.dmg
 dmg2img TorBrowser.dmg TorBrowser.img
 7z e TorBrowser.img tor.real -r
 mv tor.real tor
 chmod +x tor
-popd
+cd ../..
 
-pushd os/win
+cd os/win
 wget https://www.torproject.org/dist/torbrowser/8.0.5/tor-win32-0.3.5.7.zip
 7z e tor-win32-0.3.5.7.zip tor.exe *.dll -r
-popd
+cd ../..
 pwd
 ls
 
-# pushd os/linux
+# cd os/linux
 # mkdir 32
-# pushd 32
+# cd 32
 # wget https://www.torproject.org/dist/torbrowser/8.0.5/tor-browser-linux32-8.0.5_en-US.tar.xz
 # tar -xf tor-browser-linux32-8.0.5_en-US.tar.xz "tor-browser_en-US/Browser/TorBrowser/Tor/tor"
 # mv tor-browser_en-US/Browser/TorBrowser/Tor/tor ./tor
-# popd
+# cd ..
 
 # mkdir 64
-# pushd 64
+# cd 64
 # wget https://www.torproject.org/dist/torbrowser/8.0.5/tor-browser-linux64-8.0.5_en-US.tar.xz
 # tar -xf tor-browser-linux64-8.0.5_en-US.tar.xz "tor-browser_en-US/Browser/TorBrowser/Tor/tor"
 # mv tor-browser_en-US/Browser/TorBrowser/Tor/tor ./tor
-# popd
-# popd
+# cd ../../..
 
 #get the official NodeJS executable
-pushd os/mac
+cd os/mac
 wget https://nodejs.org/dist/v10.15.1/node-v10.15.1-darwin-x64.tar.gz
 tar -xf node-v10.15.1-darwin-x64.tar.gz "node-v10.15.1-darwin-x64/bin/node"
 mv node-v10.15.1-darwin-x64/bin/node ./node
-popd
+cd ../..
 pwd
 
-pushd os/win
+cd os/win
 mkdir 32
-pushd 32
+cd 32
 wget https://nodejs.org/dist/v10.15.1/node-v10.15.1-win-x86.zip
 7z e node-v10.15.1-win-x86.zip node.exe -r
-popd
+cd ..
 mkdir 64
-pushd
+cd 64
 wget https://nodejs.org/dist/v10.15.1/node-v10.15.1-win-x64.zip
 7z e node-v10.15.1-win-x64.zip node.exe -r
-popd
-popd
+cd ../../..
 pwd
 
-# pushd os/linux/64
+# cd os/linux/64
 # wget https://nodejs.org/dist/v10.15.1/node-v10.15.1-linux-x64.tar.xz
 # tar -xf node-v10.15.1-linux-x64.tar.xz "node-v10.15.1-linux-x64/bin/node"
 # mv node-v10.15.1-linux-x64/bin/node ./node
-# popd
+# cd ../../..
 
 # mac packaging
 mkdir temp1
-pushd temp1
+cd temp1
 cp ../os/mac/install.sh .
 cp ../os/mac/uninstall.sh .
 mkdir assets
@@ -75,7 +73,7 @@ cp ../messaging.js assets/
 cp ../os/mac/node.sh assets/
 
 zip -9 ../mac.zip * -r
-popd
+cd ..
 
 # linux 64-bit packaging
 # mkdir temp2
@@ -94,7 +92,7 @@ popd
 
 #windows 32-bit packaging
 mkdir temp3
-pushd temp3
+cd temp3
 cp ../os/win/install.bat .
 cp ../os/win/uninstall.bat .
 mkdir assets
@@ -108,12 +106,12 @@ cp ../app.js assets/
 cp ../messaging.js assets/
 
 zip -9 ../win_32.zip * -r
-popd
+cd ..
 pwd
 
 #windows 64-bit packaging
 mkdir temp4
-pushd temp4
+cd temp4
 cp ../os/win/install.bat .
 cp ../os/win/uninstall.bat .
 mkdir assets
@@ -128,5 +126,5 @@ cp ../messaging.js assets/
 pwd
 
 zip -9 ../win_64.zip * -r
-popd
+cd ..
 pwd
