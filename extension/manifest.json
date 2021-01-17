@@ -1,15 +1,17 @@
 {
   "manifest_version" :2,
-  "version": "0.1.0",
-  "name": "Onion VPN with load balancing",
-  "description": "Simultaneously connect to multiple Tor proxy servers to increase anonymity and speed",
+  "version": "0.1.2",
+  "name": "Onion VPN with Speed Control",
+  "description": "Simultaneously connect to multiple Tor proxy servers using load balancing to increase anonymity and speed",
   "permissions": [
     "proxy",
     "nativeMessaging",
     "contextMenus",
     "storage",
-    "notifications"
+    "notifications",
+    "downloads"
   ],
+  "homepage_url": "https://add0n.com/onion-network.html",
   "background": {
     "scripts": [
       "tor.js",
@@ -36,5 +38,9 @@
       "64": "data/icons/disconnected/64.png",
       "128": "data/icons/disconnected/128.png"
     }
+  },
+  "options_ui": {
+    "page": "data/options/index.html",
+    "chrome_style": true
   }
 }

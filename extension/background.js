@@ -1,12 +1,13 @@
-/* globals Tor, Events */
+/* globals Tor, Events, browser */
 'use strict';
 
 var prefs = {
   ports: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030],
-  threads: 2,
+  threads: 1,
   badge: true,
   start: false,
-  native: false
+  native: false,
+  arguments: ''
 };
 chrome.storage.local.get(prefs, ps => {
   Object.assign(prefs, ps);
@@ -20,13 +21,8 @@ chrome.storage.local.get(prefs, ps => {
       app.connect();
     }
     if (!r) {
-      chrome.windows.create({
-        url: chrome.extension.getURL('data/installer/index.html'),
-        width: 600,
-        height: 450,
-        left: screen.availLeft + Math.round((screen.availWidth - 600) / 2),
-        top: screen.availTop + Math.round((screen.availHeight - 450) / 2),
-        type: 'popup'
+      chrome.storage.local.set({
+        native: false
       });
     }
   });
@@ -47,28 +43,41 @@ chrome.storage.onChanged.addListener(ps => {
 var proxy = {};
 proxy.update = () => {
   if (app.connected.length || app.mode === 'connected') {
-    const config = {
-      mode: 'pac_script',
-      pacScript: {
-        data: `function FindProxyForURL() {
-          const ports = ${JSON.stringify(app.connected)};
-          if (ports.length) {
-            const port = ports[Math.floor(Math.random() * ports.length)];
-            return 'SOCKS localhost:' + port;
-          }
-          else {
-            return 'SOCKS localhost:2020';
-          }
-        }`,
-        mandatory: true
+    const data = `function FindProxyForURL() {
+      const ports = ${JSON.stringify(app.connected)};
+      if (ports.length) {
+        const port = ports[Math.floor(Math.random() * ports.length)];
+        return 'SOCKS localhost:' + port;
       }
-    };
-    chrome.proxy.settings.clear({
-      scope: 'regular'
-    }, () => chrome.proxy.settings.set({
-      value: config,
-      scope: 'regular'
-    }));
+      else {
+        return 'SOCKS localhost:2020';
+      }
+    }`;
+    if (/Firefox/.test(navigator.userAgent)) {
+      browser.proxy.settings.clear({}, () => {
+        browser.proxy.settings.set({
+          value: {
+            proxyType: 'autoConfig',
+            autoConfigUrl: 'data:text/javascript,' + encodeURIComponent(data),
+            proxyDNS: true
+          }
+        });
+      });
+    }
+    else {
+      chrome.proxy.settings.clear({
+        scope: 'regular'
+      }, () => chrome.proxy.settings.set({
+        value: {
+          mode: 'pac_script',
+          pacScript: {
+            data,
+            mandatory: true
+          }
+        },
+        scope: 'regular'
+      }));
+    }
   }
   else {
     chrome.proxy.settings.clear({
@@ -113,27 +122,42 @@ tor.on('disconnected', ids => {
 app.connect = port => {
   if (prefs.native === false) {
     app.notify('Native Client is not found. Follow the instruction to install it');
+    chrome.windows.create({
+      url: chrome.extension.getURL('data/installer/index.html'),
+      width: 600,
+      height: 450,
+      left: screen.availLeft + Math.round((screen.availWidth - 600) / 2),
+      top: screen.availTop + Math.round((screen.availHeight - 450) / 2),
+      type: 'popup'
+    });
     return;
   }
-  app.mode = 'connected';
-  if (app.ids.length === 0) {
-    app.emit('connecting');
-  }
-  if (port) {
-    app.ids.push(port);
-    tor.connect(port);
-  }
-  else {
-    for (const port of prefs.ports.slice(0, prefs.threads)) {
+  chrome.proxy.settings.get({}, e => {
+    if (e.levelOfControl === 'controllable_by_this_extension' || e.levelOfControl === 'controlled_by_this_extension') {
+      app.mode = 'connected';
+      if (app.ids.length === 0) {
+        app.emit('connecting');
+      }
       if (port) {
         app.ids.push(port);
-        tor.connect(port);
+        tor.connect(port, prefs.arguments);
       }
       else {
-        console.error('no more ports to use');
+        for (const port of prefs.ports.slice(0, prefs.threads)) {
+          if (port) {
+            app.ids.push(port);
+            tor.connect(port, prefs.arguments);
+          }
+          else {
+            console.error('no more ports to use');
+          }
+        }
       }
     }
-  }
+    else {
+      app.notify('Cannot control your browser\'s proxy settings; ' + e.levelOfControl);
+    }
+  });
 };
 
 app.disconnect = (trusted = false) => {
@@ -155,7 +179,7 @@ app.fix = () => {
     const n = prefs.threads - len;
     const ports = prefs.ports.filter(p => app.ids.indexOf(p) === -1);
     ports.slice(0, n).forEach(port => app.connect(port));
-    app.notify('Increasing # of channels by ' + n);
+    app.notify('Increasing # of channels by ' + n + '. Please wait...');
   }
 };
 
@@ -194,7 +218,6 @@ app.notify = message => chrome.notifications.create({
 
 var timer;
 app.on('connecting', () => {
-  console.log('connecting');
   app.title(`Connecting to the Tor network (${prefs.threads} channels)`);
   app.icon('connecting');
   window.clearInterval(timer);
@@ -202,18 +225,15 @@ app.on('connecting', () => {
   proxy.update();
 });
 app.on('connected', () => {
-  console.log('connected');
   window.clearInterval(timer);
   app.icon('connected');
 });
 app.on('update', () => {
-  console.log('update');
   app.title(`Connected to the Tor network (${app.connected.length} channels)`);
   app.badge(app.connected.length ? String(app.connected.length) : '');
   proxy.update();
 });
 app.on('disconnected', () => {
-  console.log('disconnected');
   window.clearInterval(timer);
   app.title('Disconnected from the Tor network');
   app.icon(app.mode === 'disconnected' ? 'disconnected' : 'unexpected');
@@ -236,3 +256,29 @@ chrome.browserAction.onClicked.addListener(() => {
 chrome.browserAction.setBadgeBackgroundColor({
   color: '#7d4798'
 });
+
+{
+  const {onInstalled, setUninstallURL, getManifest} = chrome.runtime;
+  const {name, version} = getManifest();
+  const page = getManifest().homepage_url;
+  onInstalled.addListener(({reason, previousVersion}) => {
+    chrome.storage.local.get({
+      'faqs': true,
+      'last-update': 0
+    }, prefs => {
+      if (reason === 'install' || (prefs.faqs && reason === 'update')) {
+        const doUpdate = (Date.now() - prefs['last-update']) / 1000 / 60 / 60 / 24 > 45;
+        if (doUpdate && previousVersion !== version) {
+          chrome.tabs.create({
+            url: page + '?version=' + version +
+              (previousVersion ? '&p=' + previousVersion : '') +
+              '&type=' + reason,
+            active: reason === 'install'
+          });
+          chrome.storage.local.set({'last-update': Date.now()});
+        }
+      }
+    });
+  });
+  setUninstallURL(page + '?rd=feedback&name=' + encodeURIComponent(name) + '&version=' + version);
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Onion VPN :: Options Page</title>
+</head>
+<body>
+  <style>
+    body {
+      min-width: 500px;
+    }
+    input[type=text] {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
+  <table width=100%>
+    <tr>
+      <td><input type="checkbox" id="badge"></td>
+      <td><label for="badge">Show badge number (total number of active Tor instances)</label></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Comma-separated list of ports<sup>1</sup></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><input type="text" id="ports"></td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" id="start"></td>
+      <td><label for="start">Start Tor client when browser starts<sup>2</sup></label></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Additional command-line arguments<sup>3</sup></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><input type="text" id="arguments"></td>
+    </tr>
+  </table>
+  <p>
+    <input type="button" id="support" value="Support Development">
+    <input type="button" id="reset" value="Reset"> - <input type="button" id="save" value="Save"> <span id="info"></span>
+  </p>
+  <hr>
+  1: When starting a new Tor instance, use a port number among this list.
+  <br>
+  2: Note that you will be disconnected until the extension successfully establishes its first connection
+  <br>
+  3: Comma-separated list of additional arguments to pass to the Tor executable. It is user responsibility to make sure these additional arguments are not going to conflict with the extension operation. For instance for the Tor client to make all OR connections through the SOCKS 5 proxy, use <code>Socks5Proxy, 127.0.0.1:9191</code>
+
+  <script src="index.js"></script>
+</body>
+</html>

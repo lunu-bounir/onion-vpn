@@ -4,7 +4,7 @@ cd helper
 
 # get the official tor executable from www.torproject.org
 cd os/mac
-wget -O TorBrowser.dmg https://www.torproject.org/dist/torbrowser/8.0.5/TorBrowser-8.0.5-osx64_en-US.dmg
+wget -O TorBrowser.dmg https://www.torproject.org/dist/torbrowser/10.0.8/TorBrowser-10.0.8-osx64_en-US.dmg
 dmg2img TorBrowser.dmg TorBrowser.img
 7z e TorBrowser.img tor.real -r
 mv tor.real tor
@@ -12,8 +12,8 @@ chmod +x tor
 cd ../..
 
 cd os/win
-wget https://www.torproject.org/dist/torbrowser/8.0.5/tor-win32-0.3.5.7.zip
-7z e tor-win32-0.3.5.7.zip tor.exe *.dll -r
+wget https://www.torproject.org/dist/torbrowser/10.0.8/tor-win32-0.4.4.6.zip
+7z e tor-win32-0.4.4.6.zip tor.exe *.dll -r
 cd ../..
 pwd
 ls

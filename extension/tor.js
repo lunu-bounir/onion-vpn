@@ -25,7 +25,7 @@ class Tor extends Events {
       killall: 'killall tor'
     };
   }
-  connect(socksPort) {
+  connect(socksPort, args = '') {
     if (Object.keys(this.instances).length === 0) {
       this.port = chrome.runtime.connectNative('onion.vpn.helper');
       this.port.onMessage.addListener(r => {
@@ -55,6 +55,7 @@ class Tor extends Events {
       stdout: '',
       stderr: ''
     };
+
     this.port.postMessage({
       method: 'spawn',
       id: socksPort,
@@ -64,7 +65,8 @@ class Tor extends Events {
         'SocksPort', String(socksPort),
         'GeoIPFile', 'geoip',
         'GeoIPv6File', 'geoip6',
-        'DataDirectory', String(socksPort)
+        'DataDirectory', String(socksPort),
+        ...args.split(/\s*,\s*/).filter(s => s)
       ]
     });
   }
